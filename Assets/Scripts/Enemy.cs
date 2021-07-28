@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
     private float _spawnHeight = 8f;
     void Start()
     {
-        transform.position = new Vector3(0, _spawnHeight, 0);
+        transform.position = RandomizeSpawn();
     }
 
     void Update()

@@ -11,9 +11,11 @@ public class Player : MonoBehaviour
     private float _nextFire = 0f;
     [SerializeField]
     private int _lives = 3;
+    private SpawnManager _spawnManager;
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
     }
 
     void Update()
