@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,11 +8,15 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
+    private GameObject _tipleShotPrefab;
+    [SerializeField]
     private float _fireCooldown = 0.3f;
     private float _nextFire = 0f;
     [SerializeField]
     private int _lives = 3;
     private SpawnManager _spawnManager;
+    [SerializeField]
+    private bool _isTripleShotActive = false;
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -21,7 +26,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
-        
+
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _nextFire)
         {
             FireLaser();
@@ -67,9 +72,17 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-            _nextFire = Time.time + _fireCooldown;
-            var position = new Vector3(transform.position.x, transform.position.y + 1f, 0);
+        _nextFire = Time.time + _fireCooldown;
+
+        if (_isTripleShotActive)
+        {
+            Instantiate(_tipleShotPrefab, transform.position, Quaternion.identity);
+        }
+        else
+        {
+            var position = new Vector3(transform.position.x, transform.position.y + 1.05f, 0);
             Instantiate(_laserPrefab, position, Quaternion.identity);
+        }
     }
 
     public void Damage()
@@ -81,5 +94,17 @@ public class Player : MonoBehaviour
             _spawnManager.OnPlayerDeath();
             Destroy(gameObject);
         }
+    }
+
+    public void EnableTripleShot()
+    {
+        _isTripleShotActive = true;
+        StartCoroutine(StopTripleShot());
+    }
+
+    IEnumerator StopTripleShot()
+    {
+        yield return new WaitForSeconds(5f);
+        _isTripleShotActive = false;
     }
 }

@@ -4,7 +4,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 4f;
-    private float _spawnHeight = 8f;
+    private float _spawnHeight = 10f;
     void Start()
     {
         transform.position = RandomizeSpawn();
@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
         MoveDown();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Laser"))
         {
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
-        if (transform.position.y < -5)
+        if (transform.position.y < -8f)
         {
             transform.position = RandomizeSpawn();
         }
