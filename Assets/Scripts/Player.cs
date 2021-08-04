@@ -21,10 +21,13 @@ public class Player : MonoBehaviour
     private bool _isShieldActive = false;
     [SerializeField]
     private GameObject _shield;
+    private int _score = 0;
+    private UIManager _uiManager;
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     void Update()
@@ -125,5 +128,16 @@ public class Player : MonoBehaviour
     {
         _isShieldActive = true;
         _shield.SetActive(_isShieldActive);
+    }
+
+    public void AddScore(int score)
+    {
+        _score += score;
+        UpdateScoreUI(_score);
+    }
+
+    private void UpdateScoreUI(int score)
+    {
+        _uiManager.UpdateScore(score);
     }
 }

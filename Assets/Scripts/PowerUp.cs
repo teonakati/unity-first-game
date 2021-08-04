@@ -7,9 +7,11 @@ public class PowerUp : MonoBehaviour
     private float _speed = 3f;
     [SerializeField]
     private EnPowerUp _powerUp;
+    private Player _player;
     void Start()
     {
         transform.position = new Vector3(Random.Range(-11f, 11f), 10f, 0f);
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 
     void Update()
@@ -27,19 +29,18 @@ public class PowerUp : MonoBehaviour
         if (collision.tag.Equals("Player"))
         {
             Destroy(gameObject);
-            var player = collision.transform.GetComponent<Player>();
 
-            if (player != null)
+            if (_player != null)
                 switch(_powerUp)
                 {
                     case EnPowerUp.TripleShot:
-                        player.EnableTripleShot();
+                        _player.EnableTripleShot();
                         break;
                     case EnPowerUp.SpeedBoost:
-                        player.EnableSpeedBoost();
+                        _player.EnableSpeedBoost();
                         break;
                     case EnPowerUp.Shield:
-                        player.EnableShield();
+                        _player.EnableShield();
                         break;
                 }
         }
