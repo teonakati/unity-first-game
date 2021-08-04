@@ -8,10 +8,10 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
-    private GameObject _tripleShotPowerUpPrefab;
-    [SerializeField]
     private float _spawnSecondsInterval = 5f;
     private bool _stopSpawning = false;
+    [SerializeField]
+    private GameObject[] _powerUpPrefabs;
     void Start()
     {
         StartCoroutine(SpawnEnemy(_spawnSecondsInterval));
@@ -33,7 +33,10 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             yield return new WaitForSeconds(Random.Range(3f, 7f));
-            Instantiate(_tripleShotPowerUpPrefab);
+
+            var randomPowerUp = Random.Range(0, 3);
+
+            Instantiate(_powerUpPrefabs[randomPowerUp]);
         }
     }
 

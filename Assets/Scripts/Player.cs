@@ -17,6 +17,10 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
     [SerializeField]
     private bool _isTripleShotActive = false;
+    [SerializeField]
+    private bool _isShieldActive = false;
+    [SerializeField]
+    private GameObject _shield;
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -37,16 +41,6 @@ public class Player : MonoBehaviour
     {
         var horizontalInput = Input.GetAxis("Horizontal");
         var verticalInput = Input.GetAxis("Vertical");
-
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            if (_speed == 3.5f)
-                _speed = _speed * 2;
-        }
-        else
-        {
-            _speed = 3.5f;
-        }
 
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
         transform.Translate(direction * _speed * Time.deltaTime);
@@ -87,6 +81,13 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        if (_isShieldActive)
+        {
+            _isShieldActive = false;
+            _shield.SetActive(_isShieldActive);
+            return;
+        }
+
         _lives--;
 
         if (_lives == 0)
@@ -106,5 +107,23 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         _isTripleShotActive = false;
+    }
+
+    public void EnableSpeedBoost()
+    {
+        StartCoroutine(StopSpeedBoost(_speed));
+    }
+
+    IEnumerator StopSpeedBoost(float speed)
+    {
+        _speed += speed;
+        yield return new WaitForSeconds(5f);
+        _speed -= speed;
+    }
+
+    public void EnableShield()
+    {
+        _isShieldActive = true;
+        _shield.SetActive(_isShieldActive);
     }
 }
